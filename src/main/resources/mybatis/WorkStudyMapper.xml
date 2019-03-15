@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.newfi.mapper.WorkStudyMapper">
+
+	<!--int addWorkStudy(Map<String, Object> map); -->
+	<insert id="addWorkStudy" parameterType="map">
+		INSERT
+		INTO
+		workstudy(title,salary,period,negotiable,recruitmentType,telephoneNumber,adress,positionDetails,recruitmentUnit,nature,scale,creatTime,userId,clickNum,areaId,tag,userName,userImage)
+		VALUES(#{title},#{salary},#{period},#{negotiable},#{recruitmentType},
+		#{telephoneNumber},#{adress},#{positionDetails},#{recruitmentUnit},#{nature},#{scale},#{creatTime},#{userId},#{clickNum},#{areaId},#{tag},#{userName},#{userImage})
+	</insert>
+	
+	<!-- void deleteWorkStudy(Map<String, Object> map); -->
+	<delete id="deleteWorkStudy" parameterType="map">
+		DELETE FROM workstudy WHERE id =#{id}
+	</delete>
+	
+	<!-- int updateWorkStudy(Map<String, Object> map); -->
+	<update id="updateWorkStudy" parameterType="map">
+		UPDATE workstudy SET id=#{id} 
+		<if test="title != null and title != ''">
+			,title=#{title}
+		</if>
+		<if test="salary != null and salary != ''">
+			,salary=#{salary}
+		</if>
+		<if test="period != null and period != ''">
+			,period=#{period}
+		</if>
+		<if test="negotiable != null and negotiable != ''">
+			,negotiable=#{negotiable}
+		</if>
+		<if test="recruitmentType != null and recruitmentType != ''">
+			,recruitmentType=#{recruitmentType}
+		</if>
+		<if test="telephoneNumber != null and telephoneNumber != ''">
+			,telephoneNumber=#{telephoneNumber}
+		</if>
+		<if test="adress != null and adress != ''">
+			,adress=#{adress}
+		</if>
+		<if test="positionDetails != null and positionDetails != ''">
+			,positionDetails=#{positionDetails}
+		</if>
+		<if test="recruitmentUnit != null and recruitmentUnit != ''">
+			,recruitmentUnit=#{recruitmentUnit}
+		</if>
+		<if test="nature != null and nature != ''">
+			,nature=#{nature}
+		</if>
+		<if test="scale != null and scale != ''">
+			,scale=#{scale}
+		</if>
+		<if test="userId != null and userId != ''">
+			,userId=#{userId}
+		</if>
+		<if test="clickNum != null and clickNum != ''">
+			,clickNum=#{clickNum}
+		</if>
+		<if test="updateTime != null and updateTime != ''">
+			,updateTime=#{updateTime}
+		</if>
+		<if test="areaId != null and areaId != ''">
+			,areaId=#{areaId}
+		</if>
+		WHERE id = #{id}
+	</update>
+	
+	<!-- List<Map<String, Object>> findWorkStudy(Map<String, Object> map); -->
+	<select id="findWorkStudy" parameterType="map" resultType="map">
+		select * from workstudy where 1=1
+		<if test="areaId != null and areaId != ''">
+			and areaId = #{areaId}
+		</if>
+		<if test="id != null and id != ''">
+			and id = #{id}
+		</if>
+		<if test="userId != null and userId != ''">
+			and userId = #{userId}
+		</if>
+		<if test="keyWord != null and keyWord != ''">
+			and title LIKE '%${keyWord}%'
+		</if>
+		<if test="tag != null and tag != ''">
+			and tag LIKE '%${tag}%'
+		</if>
+		<if test="recruitmentType != null and recruitmentType != ''">
+			and recruitmentType = #{recruitmentType}
+		</if>
+		<if test="pageSize != null and pageSize != ''">
+			limit #{currentPage},#{pageSize}
+		</if>
+	</select>
+	
+	
+	<!-- public int addCollectionForItem(Map<String, Object> map); -->
+	<insert id="addCollectionForItem" parameterType="map">
+		INSERT INTO
+		collection (
+		userId,
+		itemId
+		)
+		VALUES
+		(
+		#{userId},
+		#{itemId}
+		)
+	</insert>
+
+	<!-- public int deleteCollectionForItem(Map<String, Object> map); -->
+	<delete id="deleteCollectionForItem" parameterType="map">
+		DELETE FROM
+		collection
+		WHERE userId =
+		#{userId} AND itemId = #{itemId}
+	</delete>
+
+	<!-- public List<Item> findCollectionByUserId(int userId); -->
+	<select id="findCollectionByUserId" parameterType="int"
+		resultType="map">
+		SELECT * FROM workstudy WHERE id IN (SELECT itemId FROM
+		collection WHERE userId = #{userId})
+	</select>
+	
+	<!-- public void deleteCollectionByItemId(int id); -->
+	<delete id="deleteCollectionByItemId" parameterType="int">
+		DELETE FROM
+		collection
+		WHERE itemId = #{id}
+	</delete>
+	
+	<!-- public List<Ad> findAd(int status);
+	<select id="findAd" parameterType="int" resultType="map">
+		select * from
+		ad WHERE status = #{status}
+	</select>
+	 -->
+	<!-- public Map<String, Object> findUserByUserId(Map<String, Object> map2); -->
+	<select id="findUserByUserId" parameterType="map"
+		resultType="map">
+		select * from usertable WHERE 1=1
+		<if test="userId != null and userId != ''">
+			and userId = #{userId}
+		</if>
+		<if test="id != null and id != ''">
+			and id = #{id}
+		</if>
+	</select>
+
+	<!-- public void insertUser(Map<String, Object> map2); -->
+	<insert id="insertUser" parameterType="map">
+		insert into
+		usertable(userName,telphone,userId,status)
+		values(#{username},#{tel},#{userId},#{status})
+	</insert>
+	
+	
+	
+	<!-- public List<Map<String, Object>> findUserByStatus(Map<String, Object> 
+		map); -->
+	<select id="findUserByStatus" parameterType="map"
+		resultType="map">
+		select * from usertable WHERE 1=1
+		<if test="status != null and status != ''">
+			and status = #{status}
+		</if>
+		<if test="keyWord != null and keyWord != ''">
+			and userName LIKE '%${keyWord}%'
+		</if>
+		<if test="pageSize != null and pageSize != ''">
+			LIMIT #{currentPage},#{pageSize}
+		</if>
+	</select>
+
+	<!-- public int updateUserStatus(Map<String, Object> map); -->
+	<update id="updateUserStatus" parameterType="map">
+		update usertable set
+		status = #{status} where userId = #{userId}
+	</update>
+	
+	
+	<!-- public void addManager(Map<String, Object> map); -->
+	<insert id="addManager" parameterType="map">
+		insert into
+		managertable(userId,userName,tel,status,areaId,superManager)
+		values(#{userId},#{userName},#{tel},#{status},#{areaId},#{superManager})
+	</insert>
+	
+	<!-- public void deleteManager(int id); -->
+	<delete id="deleteManager" parameterType="int">
+		delete from managertable where id = #{id}
+	</delete>
+	
+	<!-- public int updateManager(Map<String, Object> map); -->
+	<update id="updateManager" parameterType="map">
+		update managertable set id = #{id}
+		<if test="userId != null and userId != ''">
+			,userId = #{userId}
+		</if>
+		<if test="userName != null and userName != ''">
+			,userName = #{userName}
+		</if>
+		<if test="tel != null and tel != ''">
+			,tel = #{tel}
+		</if>
+		<if test="status != null and status != ''">
+			,status = #{status}
+		</if>
+		<if test="areaId != null and areaId != ''">
+			,areaId = #{areaId}
+		</if>
+		<if test="superManager != null and superManager != ''">
+			,superManager = #{superManager}
+		</if>
+		where id = #{id}
+	</update>
+	
+	<!-- public List<Map<String, Object>> findManager(Map<String, Object> map); -->
+	<select id="findManager" parameterType="map" resultType="map">
+		select * from managertable where 1=1 
+		<if test="areaId != null and areaId != ''">
+			and areaId = #{areaId}
+		</if>
+		<if test="status != null and status != ''">
+			and status = #{status}
+		</if>
+		<if test="keyWord != null and keyWord != ''">
+			and userName LIKE '%${keyWord}%'
+		</if>
+		<if test="pageSize != null and pageSize != ''">
+			LIMIT #{currentPage},#{pageSize}
+		</if>
+	</select>
+	
+	
+	<!-- public int addAd(Map<String, Object> map); -->
+	<insert id="addAd" parameterType="map">
+		insert into
+		ad(adTitle,adPhoto,adCreateTime,adClickLink,status)
+		values(#{adTitle},#{adPhoto},#{adCreateTime},#{adClickLink},#{status})
+	</insert>
+	
+	<!-- public void deleteAd(int id); -->
+	<delete id="deleteAd" parameterType="int">
+		delete from ad where id = #{id}
+	</delete>
+	
+	<!-- public int updateAd(Map<String, Object> map); -->
+	<update id="updateAd" parameterType="map">
+		update ad set id = #{id}
+		<if test="adTitle != null and adTitle != ''">
+			,adTitle = #{adTitle}
+		</if>
+		<if test="adPhoto != null and adPhoto != ''">
+			,adPhoto = #{adPhoto}
+		</if>
+		<if test="adClickLink != null and adClickLink != ''">
+			,adClickLink = #{adClickLink}
+		</if>
+		<if test="status != null and status != ''">
+			,status = #{status}
+		</if>
+		where id = #{id}
+	</update>
+	
+	<!-- public List<Ad> findAd(int status); -->
+	<select id="findAd" parameterType="int"
+		resultType="map">
+		select * from ad WHERE status = #{status}
+	</select>
+	
+	
+	<!-- public int addOrUpdateKeyWord(String str); -->
+	<insert id="addOrUpdateKeyWord" parameterType="string">
+		insert into
+		notuseword(keyWord)
+		values(#{keyWord})
+	</insert>
+	
+	<!-- public void deleteNotUseKeyWord(); -->
+	<delete id="deleteNotUseKeyWord">
+		delete from notuseword
+	</delete>
+	
+	<!--public List<Map<String, Object>> findKeyWord(Map<String, Object> map); -->
+	<select id="findKeyWord" parameterType="map"
+		resultType="map">
+		select * from notuseword WHERE keyWord LIKE '%${keyWord}%'
+	</select>
+</mapper>
